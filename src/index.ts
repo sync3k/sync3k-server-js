@@ -14,19 +14,33 @@ app.get('/:path', (req: Request, res: Response) => {
 
 type OrderedMessage = {
   id: Number;
-  msg: String;
+  message: String;
 };
 
+
 let messages: { [key: string]: [OrderedMessage] } = {};
+let sockets: { [key: string]: Set<WebSocket> } = {};
 
 function handleTopic(topic: string, ws: WebSocket, skip = 0) {
   messages[topic] = (messages[topic] as [OrderedMessage]) || [] as [OrderedMessage];
   ws.on('message', (msg) => {
-    messages[topic].push({ id: messages[topic].length, msg: msg.toString() });
+    const msgToPush = { id: messages[topic].length, message: msg.toString() };
+    messages[topic].push(msgToPush);
+    const jsonMsgToPush = JSON.stringify(msgToPush);
+    sockets[topic].forEach((ws) => {
+      ws.send(jsonMsgToPush);
+    });
+  });
+  ws.on('close', () => {
+    sockets[topic].delete(ws);
   });
   messages[topic].forEach((msg) => {
     ws.send(JSON.stringify(msg));
   });
+  if (!sockets[topic]) {
+    sockets[topic] = new Set();
+  }
+  sockets[topic].add(ws);
 }
 
 app.ws('/:topic', (ws: WebSocket, req: Request) => {
