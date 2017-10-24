@@ -1,7 +1,8 @@
 {
   "name": "sync3k-server-js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sync3k Local JS Server for testing and development",
+  "url": "https://github.com/sync3k/sync3k-server-js",
   "scripts": {
     "tsc": "tsc"
   },
@@ -11,9 +12,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "express": "^4.16.2",
-    "express-ws": "^3.0.0",
-    "global": "^4.3.2",
-    "ts-node": "^3.3.0"
+    "express-ws": "^3.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.0.37",
