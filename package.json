@@ -5,6 +5,9 @@
   "scripts": {
     "tsc": "tsc"
   },
+  "bin": {
+    "sync3k-server-js": "./bin/sync3k-server-js.js"
+  },
   "main": "dist/index.js",
   "dependencies": {
     "express": "^4.16.2",
